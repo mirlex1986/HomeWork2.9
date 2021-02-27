@@ -13,58 +13,65 @@ class ViewController: UIViewController {
     @IBOutlet var animatedView: SpringView!
     
     @IBOutlet var animationNameLabel: UILabel!
-    @IBOutlet var animationDelayLabel: UILabel!
-    @IBOutlet var animationForceLabel: UILabel!
-    @IBOutlet var animationDurationLabel: UILabel!
-    @IBOutlet var AnimationCurveLabel: UILabel!
     
     let animation = Spring.AnimationPreset.allCases
     let curve = Spring.AnimationCurve.allCases
+    
     var animationIndex = 0
+    var parameter = Parameters()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setButtonText()
+        randomNewParameters()
     }
 
     @IBAction func runAnimationButtonPressed() {
         getAnimationName()
         setAnimaionParameters()
-        
-        
         setTextLabels()
+        
         animatedView.animate()
+        
         setButtonText()
+        randomNewParameters()
     }
 
     private func getAnimationName() {
+        animatedView.animation = animation[animationIndex].rawValue
+        
         if animationIndex < animation.count - 1 {
-            animatedView.animation = animation[animationIndex].rawValue
             animationIndex += 1
         } else {
-            animatedView.animation = animation[animationIndex].rawValue
             animationIndex = 0
         }
     }
     
     private func setAnimaionParameters() {
         animatedView.curve = curve[Int.random(in: 0...curve.count - 1)].rawValue
-        
-        animatedView.delay = CGFloat.random(in: 0...1)
-        animatedView.force = CGFloat.random(in: 1...2)
-        animatedView.duration = CGFloat.random(in: 1...3)
+        animatedView.delay = CGFloat(parameter.delay)
+        animatedView.force = CGFloat(parameter.force)
+        animatedView.duration = CGFloat(parameter.duration)
     }
     
     private func setTextLabels() {
-        animationNameLabel.text = "Name: \(animatedView.animation)"
-        animationDelayLabel.text = "Delay: " + String(format: "%.2f", animatedView.delay)
-        animationDurationLabel.text = "Duration: " + String(format: "%.2f", animatedView.duration)
-        animationForceLabel.text = "Force: " + String(format: "%.2f", animatedView.force)
-        AnimationCurveLabel.text = "Curve: \(animatedView.curve)"
+        animationNameLabel.text = """
+            Name: \(animatedView.animation)
+            Delay: \(String(format: "%.2f", animatedView.delay))
+            Duration: \(String(format: "%.2f", animatedView.duration))
+            Force: \(String(format: "%.2f", animatedView.force))
+            Curve: \(animatedView.curve)
+        """
     }
 
     private func setButtonText() {
         runAnimationButton.setTitle("Run \(animation[animationIndex].rawValue)", for: .normal)
+    }
+    
+    private func randomNewParameters() {
+        parameter.delay = Double.random(in: 0...1)
+        parameter.duration = Double.random(in: 1...3)
+        parameter.force = Double.random(in: 1...2)
     }
 }
 

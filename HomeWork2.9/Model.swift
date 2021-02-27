@@ -8,8 +8,8 @@
 import Foundation
 
 struct Parameters {
-    var force: Double
-    var duration: Double
-    var delay: Double
+    var force = 0.0
+    var duration = 0.0
+    var delay = 0.0
 }
 
